@@ -5,7 +5,7 @@ Programa cliente que abre un socket a un servidor
 """
 
 import socket
-import os
+import sys
 
 
 # Cliente UDP simple.
@@ -16,7 +16,8 @@ cliente = sys.argv[2]
 
 if len(sys.argv) =! 3:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
-if method != "INVITE" or "BYE"
+#ACK no lo introduce el usuario
+if method != "INVITE" or "BYE":
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
 if ":" or "@" not in cliente:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
@@ -25,21 +26,24 @@ cliente = cliente.split("@")[1]
 
 SERVER = cliente.split(":")[0]
 PORT = int(cliente.split(":")[1])
-# Contenido que vamos a enviar
-LINE = '¡Hola mundo!'
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((SERVER, PORT))
-
+LINE = method + " sip:" + receptor + "@" + SERVER + " SIP/2.0"
 print "Enviando: " + LINE
 my_socket.send(LINE + '\r\n')
-data = my_socket.recv(1024)
+try:
+    data = my_socket.recv(1024)
+except socket.error:
+    print  "Error: no server listening at" + SERVER + " port " + str(PORT)
+    sys.exit()
 
 print 'Recibido -- ', data
+response = data.split("SIP/2.0 ")
+if response[1] ==    
 print "Terminando socket..."
-
 # Cerramos todo
 my_socket.close()
 print "Fin."
