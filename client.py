@@ -45,7 +45,9 @@ response = data.split("SIP/2.0 ")
 if response[1] == "100 Trying\r\n":
     method = "ACK"
     LINE = method + " sip:" + receptor + "@" + SERVER + " SIP/2.0"
-    my_socket.send(LINE + '\r\n')    
+    my_socket.send(LINE + '\r\n')
+elif response[1] == "400 Bad Request\r\n":
+    print "Método no entendido"
 print "Terminando socket..."
 # Cerramos todo
 my_socket.close()
