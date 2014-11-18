@@ -42,7 +42,10 @@ except socket.error:
 
 print 'Recibido -- ', data
 response = data.split("SIP/2.0 ")
-if response[1] ==    
+if response[1] == "100 Trying\r\n":
+    method = "ACK"
+    LINE = method + " sip:" + receptor + "@" + SERVER + " SIP/2.0"
+    my_socket.send(LINE + '\r\n')    
 print "Terminando socket..."
 # Cerramos todo
 my_socket.close()
