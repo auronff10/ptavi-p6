@@ -30,12 +30,29 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
                 aEjecutar = ('mp32rtp -i ' + IP + ' -p 23032 < ' + fichero_audio)
                 print "Vamos a ejecutar", aEjecutar
                 os.system(aEjecutar) 
+            
+            elif method = "BYE":
+                self.wfile.write("SIP/2.0 200 OK\r\n")
+            else:
+                #Para cualquier caso que no se soporta
+                self.wfile.write("SIP/2.0 405 Method not Allowed\r\n")                       
+                self.wfile.write("SIP/2.0 400 Bad Request\r\n")
+                print "Métodos desconocidos, no soportados"
             # Si no hay más líneas salimos del bucle infinito
             if not line:
                 break
 
 if __name__ == "__main__":
-    # Creamos servidor de eco y escuchamos
-    serv = SocketServer.UDPServer(("", 6001), EchoHandler)
-    print "Lanzando servidor UDP de eco..."
+    # Creamos servidor de eco y escuchamos, verificamos los datos.
+    if len(sys.argv) != 4:
+        sys.exit("Usage: python server.py IP port audio_file")
+    try:
+        IP = sys.argv[1]
+        puerto = int(sys.argv[2])
+        audio_file = sys.argv[3]
+    except IndexError:
+        sys.exit("Usage: python server.py IP port audio_file")
+    
+    serv = SocketServer.UDPServer(("", puerto), EchoHandler)
+    print "Listening..."
     serv.serve_forever()
