@@ -16,7 +16,7 @@ cliente = sys.argv[2]
 
 if len(sys.argv) != 3:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
-#ACK no lo introduce el usuario
+# ACK no lo introduce el usuario
 if ":" not in cliente:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
 receptor = cliente.split("@")[0]
@@ -35,7 +35,7 @@ my_socket.send(LINE + '\r\n')
 try:
     data = my_socket.recv(1024)
 except socket.error:
-    print  "Error: no server listening at" + SERVER + " port " + str(PORT)
+    print "Error: no server listening at" + SERVER + " port " + str(PORT)
     sys.exit()
 
 print 'Recibido -- ', data
