@@ -14,12 +14,10 @@ cliente = sys.argv[2]
 
 # Dirección IP del servidor.
 
-if len(sys.argv) =! 3:
+if len(sys.argv) != 3:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
 #ACK no lo introduce el usuario
-if method != "INVITE" or "BYE":
-    sys.exit("Usage: python client.py method receiver@IP:SIPport")
-if ":" or "@" not in cliente:
+if ":" not in cliente:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
 receptor = cliente.split("@")[0]
 cliente = cliente.split("@")[1]
@@ -45,7 +43,7 @@ response = data.split("SIP/2.0 ")
 if response[1] == "100 Trying\r\n":
     method = "ACK"
     LINE = method + " sip:" + receptor + "@" + SERVER + " SIP/2.0"
-    my_socket.send(LINE + '\r\n')
+    my_socket.send(LINE + "\r\n")
 elif response[1] == "400 Bad Request\r\n":
     print "Método no entendido"
 print "Terminando socket..."
